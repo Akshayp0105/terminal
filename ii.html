@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loan Advisor Login</title>
+    <link rel="stylesheet" href="ii.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.31.2/dist/umd/supabase.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="close-btn">X</div>
+        <div class="login-division">
+            <h1>Loan Advisor Login</h1>
+            <p>Secure access to your loan advisor portal</p>
+            <div class="button-container">
+                <button class="social-login email" onclick="signInWithEmail()"  >Email</button>
+                <button class="social-login google" onclick="signInWithProvider('google')">Google</button>
+                <button class="social-login microsoft" onclick="signInWithProvider('azure')">Microsoft</button>
+                <button class="social-login apple" onclick="signInWithProvider('apple')">Apple</button>
+            </div>
+            <button class="login-btn" onclick="signOut()">/button>
+        </div>
+        <div class="info-division">
+            <p class="caption">Simplify and manage your loan applications with our user-friendly portal</p>
+            <div class="logo-container">
+                <div class="card">
+                    <img src="loan.webp" alt="Card Image" class="card-image">
+                    <div class="card-content">
+                        <h2 class="card-title">Loan</h2>
+                        <p class="card-description">nothing's a gift, it's all on loan.</p>
+                        
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="acc.png" alt="Card Image 2" class="card-image">
+                    <div class="card-content">
+                        <h2 class="card-title">Accounts</h2>
+                        <p class="card-description">work until your bank account starts looking like a phone number.</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <img src="apoo.png" alt="Card Image 3" class="card-image">
+                    <div class="card-content">
+                        <h2 class="card-title">Appointment</h2>
+                        <p class="card-description">book your appointment, avoid your disappointment.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize Supabase
+        const supabaseUrl = 'https://qglmvceyggcldopqgqex.supabase.co';
+        const supabaseKey = 'your-supabase-key-here';
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function signInWithEmail() {
+            const email = prompt('Please enter your email:');
+            const password = prompt('Please enter your password:');
+            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            if (error) {
+                alert('Error signing in: ' + error.message);
+            } else {
+                alert('Signed in as ' + data.user.email);
+            }
+        }
+
+        async function signInWithProvider(provider) {
+            const { data, error } = await supabase.auth.signInWithOAuth({
+                provider: provider,
+                options: {
+                    redirectTo: window.location.href // Redirect to the same page after login
+                }
+            });
+            if (error) {
+                alert('Error signing in with ' + provider + ': ' + error.message);
+            } else {
+                // You will be redirected to the provider's login page
+            }
+        }
+
+        async function signOut() {
+            const { error } = await supabase.auth.signOut();
+            if (error) {
+                alert('Error signing out: ' + error.message);
+            } else {
+                alert('Signed out');
+            }
+        }
+    </script>
+</body>
+</html>

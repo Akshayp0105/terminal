@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="styles4.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://alcdn.msauth.net/browser/2.14.2/js/msal-browser.min.js"></script>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+        
+        <!-- Google Sign-In -->
+        <div id="g_id_onload"
+             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+             data-callback="handleGoogleCredentialResponse">
+        </div>
+        <div class="g_id_signin" 
+             data-type="standard"></div>
+        
+        <!-- Microsoft Sign-In -->
+        <button class="ms-login" onclick="signInWithMicrosoft()">Login with Microsoft</button>
+    </div>
+
+    <script>
+        // Google Sign-In
+        function handleGoogleCredentialResponse(response) {
+            console.log('Encoded JWT ID token: ' + response.credential);
+            // Here you can send the token to your server for verification
+        }
+
+        // Microsoft Sign-In
+        const msalConfig = {
+            auth: {
+                clientId: "YOUR_MICROSOFT_CLIENT_ID",
+                authority: "https://login.microsoftonline.com/common",
+                redirectUri: window.location.href,
+            }
+        };
+
+        const msalInstance = new msal.PublicClientApplication(msalConfig);
+
+        function signInWithMicrosoft() {
+            const loginRequest = {
+                scopes: ["openid", "profile", "User.Read"]
+            };
+
+            msalInstance.loginPopup(loginRequest)
+                .then(response => {
+                    console.log('ID token acquired: ' + response.idToken);
+                    // Here you can send the token to your server for verification
+                })
+                .catch(error => {
+                    console.error(error);
+                });
+        }
+    </script>
+</body>
+</html>
