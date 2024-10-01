@@ -1,1 +1,1 @@
-# alpha
+Fintech based project to give assistance in loan and investment. 
